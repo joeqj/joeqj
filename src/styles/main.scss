@@ -4,6 +4,10 @@ $dot: #ffa500;
 $text: #dddddd;
 $background: #1e1e1e;
 
+$l-background: #ffffff;
+$l-text: #222222;
+$l-link: #881280;
+
 // Fonts
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;600&display=swap');
 
@@ -14,9 +18,32 @@ $background: #1e1e1e;
     box-sizing: border-box;
 }
 
+[data-theme="light"] {
+    --link: #881280;
+    --text: #222222;
+    --background: #ffffff;
+    --select-bg: #fafafa;
+    --select-border: #c8c8c8;
+}
+
+html {
+    --link: #5db0d7;
+    --text: #dddddd;
+    --background: #1e1e1e;
+    --select-bg: #262626;
+    --select-border: #4c4c4c;
+}
+
 body {
-    background: $background;
+    background: var(--background);
     font-family: 'Inter', sans-serif;
+    transition: all .25s ease-in-out;
+    p {
+        color: var(--text);
+        font-weight: 650;
+        font-size: 1rem;
+        letter-spacing: -0.018em;
+    }
 }
 
 .app {
@@ -63,7 +90,7 @@ h1, h2, h3, h4 {
     font-size: 2rem;
     line-height: 30px;
     margin-bottom: 4rem;
-    color: $text;
+    color: var(--text);
     font-weight: 700;
 }
 
@@ -76,15 +103,8 @@ ul {
     line-height: 30px;
 }
 
-p {
-    color: $text;
-    font-weight: 650;
-    font-size: 1rem;
-    letter-spacing: -0.018em;
-}
-
 a {
-    color: $link;
+    color: var(--link);
     &:not(.description-link) {
         position: relative;
         &:before {
@@ -108,14 +128,6 @@ a {
                 visibility: visible;
             }
         }
-    }
-}
-
-span {
-    display: block;
-    color: #898989;
-    a {
-        color: #898989;
     }
 }
 
@@ -186,9 +198,9 @@ select {
     display: block;
     padding: .5rem 5.4rem .5rem .5rem;
     margin: .8rem 0 0 0;
-    background: #262626;
-    border-color: #4c4c4c;
-    color: $text;
+    background: var(--select-bg);
+    border-color: var(--select-border);
+    color: var(--text);
     &:focus {
         -webkit-border-radius: 0;
         border-radius: 0;

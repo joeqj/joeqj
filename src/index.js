@@ -3,6 +3,7 @@ import './styles/skeleton.scss';
 import './styles/main.scss';
 
 import "./js/three.js";
+import changeTheme from "./js/three.js";
 import '../node_modules/waypoints/lib/noframework.waypoints.js';
 import "./js/devtools.js";
 
@@ -47,12 +48,23 @@ $(document).ready(function() {
 
 	$('#theme').on('change', function() {
 		if ($(this).val() == "light") {
-			$('body').addClass("light");
+			document.documentElement.setAttribute('data-theme', 'light');
+			localStorage.setItem('theme', 'light');
+			changeTheme("light");
 		} else {
-			$('body').removeClass("light");
-		}
-		
-	})
+			document.documentElement.setAttribute('data-theme', 'dark');
+			localStorage.setItem('theme', 'dark');
+			changeTheme("dark");
+		}	
+	});
+
+	
+	const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
+	$('#theme').val(currentTheme);
+
+	if (currentTheme) {
+		document.documentElement.setAttribute('data-theme', currentTheme);
+	}
 	  
 });
 
