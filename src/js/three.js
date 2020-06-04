@@ -5,9 +5,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import gltfPath from '../assets/models/Cross/cross.glb';
 
 let container = document.getElementById("canvas-element");
-let camera, scene, renderer, effect;
-
-let obj;
+let camera, scene, renderer, effect, obj;
 
 let windowHalfX = window.innerWidth / 2;
 let windowHalfY = window.innerHeight / 2;
@@ -40,18 +38,16 @@ function init() {
                 child.geometry.center(); // center here
             }
         });
-
         gltf.scene.scale.set(1.5, 1.5, 1.5); // scale here
         obj = gltf.scene;
-
         scene.add(obj);
-        },
+    },
         (xhr) => {
             console.log(`${( xhr.loaded / xhr.total * 100 )}% loaded`);
         },
         (error) => {
             console.error('An error happened', error);
-        },
+        }
     );
 
     // scene.add( obj );
