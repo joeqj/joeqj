@@ -30,9 +30,6 @@ $(document).ready(function() {
 		}
 	});
 
-	// Three JS Video
-	video = document.getElementById('video');
-
 	// Waypoints
 	var projects = document.getElementsByClassName("project");
 	for (var i = 0; i < projects.length; i++) {
