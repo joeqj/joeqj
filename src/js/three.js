@@ -103,7 +103,7 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
 
     // renderer.setSize( container.offsetWidth, container.offsetHeight );
-    effect.setSize(window.innerWidth, window.innerHeight);
+    effect.setSize(container.offsetWidth, container.offsetHeight);
 }
 
 export const removeObject = (path) => {
@@ -111,10 +111,22 @@ export const removeObject = (path) => {
         scene.remove( objPivot );
         scene.remove( obj );
     }
-    
 }
 
 export const addObject = (path, scale) => {
+    handleObject(path, scale);
+}
+
+export const updateObject = (path, scale) => {
+    if (obj) {
+        if (obj.name != path) {
+            removeObject(path);
+            handleObject(path, scale);
+        }
+    }
+}
+
+const handleObject = (path, scale) => {
     let loader = new GLTFLoader();
     loader.load(path, gltf => {
         gltf.scene.scale.set(scale, scale, scale); // scale here
@@ -134,43 +146,10 @@ export const addObject = (path, scale) => {
         objPivot.add( obj );
     },
         (xhr) => {
-            console.log(`${( xhr.loaded / xhr.total * 100 )}% loaded`);
+            // console.log(`${( xhr.loaded / xhr.total * 100 )}% loaded`);
         },
         (error) => {
-            console.error('An error happened', error);
+            console.error('An error occured when trying to load 3d Models', error);
         }
     );
-}
-
-export const updateObject = (path, scale) => {
-    if (obj) {
-        if (obj.name != path) {
-            removeObject(path);
-            let loader = new GLTFLoader();
-            loader.load(path, gltf => {
-                gltf.scene.scale.set(scale, scale, scale); // scale here
-                obj = gltf.scene;
-                obj.name = String(path);
-                gltf.scene.traverse(function(child) { });
-    
-                let box = new THREE.Box3().setFromObject( obj );
-                box.getCenter( obj.position ); 
-                obj.position.multiplyScalar( - 1 );
-    
-                // var helper = new THREE.Box3Helper( box, 0xffff00 );
-                // scene.add( helper );
-    
-                objPivot = new THREE.Group();
-                scene.add( objPivot );
-                objPivot.add( obj );
-            },
-                (xhr) => {
-                    console.log(`${( xhr.loaded / xhr.total * 100 )}% loaded`);
-                },
-                (error) => {
-                    console.error('An error happened', error);
-                }
-            );
-        }
-    }
 }
