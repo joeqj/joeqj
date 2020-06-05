@@ -24,6 +24,7 @@ $l-link: #881280;
     --background: #ffffff;
     --select-bg: #fafafa;
     --select-border: #c8c8c8;
+    --highlight-color: #cfe8fc;
 }
 
 html {
@@ -32,12 +33,31 @@ html {
     --background: #1e1e1e;
     --select-bg: #262626;
     --select-border: #4c4c4c;
+    --highlight-color: #0b2544;
 }
+
+::selection {
+    background: var(--highlight-color);
+}
+::-moz-selection {
+    background: var(--highlight-color);
+}
+
+h1, h2, p, a {
+    &::-moz-selection {
+        color: var(--text) !important;
+    }
+    &::selection {
+        color: var(--text) !important;
+    }
+}
+
 
 body {
     background: var(--background);
     font-family: 'Inter', sans-serif;
     transition: all .25s ease-in-out;
+    
     p {
         color: var(--text);
         font-weight: 650;
@@ -50,6 +70,8 @@ body {
 .app {
     transition: all .4s ease-in-out;
     width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
     @media (min-width: 991px) {
         width: 90%;
     }
@@ -215,7 +237,10 @@ select {
     appearance: none;
     display: block;
     padding: .5rem 5.4rem .5rem .5rem;
-    margin: .8rem 0 0 0;
+    margin: 0 auto;
+    @media (min-width: 750px) {
+        margin: .8rem 0 0 0;
+    }
     background: var(--select-bg);
     border-color: var(--select-border);
     color: var(--text);
@@ -229,7 +254,16 @@ select {
 
 .footer {
     .columns {
-        padding: 15rem 2rem  2rem !important;
+        text-align: center;
+        @media (min-width: 750px) {
+            text-align: left;
+            padding: 15rem 2rem  2rem !important;
+        }
+        .notice {
+            p {
+                margin-top: 1.75rem;
+            }
+        }
     }
 }
 
@@ -240,10 +274,11 @@ select {
     width: 75vw;
     height: 50%;
     height: 50vh;
-    opacity: 1;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    @media screen and (max-width: 750px) {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
     @media (min-width: 750px) {
         width: 57%;
         width: 57vw;
@@ -253,9 +288,16 @@ select {
         top: 50%;
         transform: translateY(-50%);
         display: block;
-        opacity: 1;
     }
-}
+    @media only screen 
+        and (min-device-width : 768px) 
+        and (max-device-width : 1024px) 
+        and (orientation : portrait) { 
+            width: 100%;
+            right: 0;
+            opacity: 0.5;
+        }
+    }
 
 #devtools-msg {
     position: fixed;

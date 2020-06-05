@@ -19,7 +19,8 @@ module.exports = {
                             options: { 
                                 minimize: {
                                     removeComments: false,
-                                    collapseWhitespace: true
+                                    collapseWhitespace: true,
+                                    posthtml: true
                                 }
                             }
                         }

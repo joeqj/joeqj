@@ -26,6 +26,7 @@ let modelArray = {
 
 let isOpen = false;
 let isAlerted = false;
+let isBottom = false;
 
 window.mobileCheck = function() {
 	let check = false;
@@ -52,12 +53,11 @@ $(document).ready(function() {
 		} else {
 			isAlerted = false;
 		}
-	});
+	});	
 
-	console.log(mobileCheck());
-	
-
-	addObject(offgrid, 2);
+	setTimeout(function() {
+		addObject(offgrid, 2);
+	},250);
 
 	if (mobileCheck() === false) {
 		// Waypoints -- Desktop
@@ -70,6 +70,7 @@ $(document).ready(function() {
 						if (direction === "down") {
 							let scale = this.element.dataset.scale;
 							updateObject(modelArray[this.element.dataset.project], scale);
+							console.log(this.element.dataset.project);
 						}
 					},
 					offset: 70 
@@ -80,6 +81,7 @@ $(document).ready(function() {
 						if (direction === "up") {
 							let scale = this.element.dataset.scale;
 							updateObject(modelArray[this.element.dataset.project], scale);
+							console.log(this.element.dataset.project);
 						}
 					},
 					offset: -150 
