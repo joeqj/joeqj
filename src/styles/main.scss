@@ -75,7 +75,7 @@ body {
     @media (min-width: 991px) {
         width: 90%;
     }
-    @media (min-width: 1290px) {
+    @media (min-width: 1280px) {
         width: 65%;
     }
     > .row > .columns {
@@ -280,6 +280,16 @@ select {
         transform: translate(-50%, -50%);
     }
     @media (min-width: 750px) {
+        width: 50%;
+        width: 50vw;
+        height: 95%;
+        height: 95vh;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        display: block;
+    }
+    @media (min-width: 1300px) {
         width: 57%;
         width: 57vw;
         height: 95%;

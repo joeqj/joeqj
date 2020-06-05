@@ -3,7 +3,7 @@ import './styles/skeleton.scss';
 import './styles/main.scss';
 
 import "./js/three.js";
-import { changeTheme, addObject, removeObject, updateObject } from "./js/three.js";
+import { changeTheme, addObject, updateObject } from "./js/three.js";
 
 import 'waypoints/lib/noframework.waypoints.js';
 import "./js/devtools.js";
@@ -121,7 +121,6 @@ $(document).ready(function() {
 		}
 	}
 	
-
 	$('#theme').on('change', function() {
 		if ($(this).val() == "light") {
 			document.documentElement.setAttribute('data-theme', 'light');
@@ -134,9 +133,10 @@ $(document).ready(function() {
 		}	
 	});
 
-	
 	const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
-	$('#theme').val(currentTheme);
+	if (currentTheme) {
+		$('#theme').val(currentTheme);
+	}
 
 	if (currentTheme) {
 		document.documentElement.setAttribute('data-theme', currentTheme);
@@ -148,6 +148,6 @@ const pushRight = () => {
 	if (window.innerWidth < 768) {
 		$(".app").css("padding-left", "0px");
 	} else {
-		$(".app").css("padding-left", window.innerWidth / 20 + "px");
+		$(".app").css("padding-left", window.innerWidth / 35 + "px");
 	}
 }
