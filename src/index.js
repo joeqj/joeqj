@@ -3,14 +3,19 @@ import './styles/skeleton.scss';
 import './styles/main.scss';
 
 import "./js/three.js";
-import changeTheme from "./js/three.js";
+import { changeTheme, addObject, removeObject, updateObject } from "./js/three.js";
 import '../node_modules/waypoints/lib/noframework.waypoints.js';
 import "./js/devtools.js";
 
+import offgrid from './assets/models/oganimation.glb';
+import julianjaschke from './assets/models/cross.glb';
+import todayssupply from './assets/models/globe.glb';
+import reification from './assets/models/mutualism.glb';
+import radunion from './assets/models/rad.glb';
+import trjfp from './assets/models/apple.glb';
 
 let isOpen = false;
 let isAlerted = false;
-let video;
 
 $(document).ready(function() {
 	// Resizing
@@ -31,18 +36,67 @@ $(document).ready(function() {
 		}
 	});
 
+	addObject(offgrid, 2);
 	// Waypoints
 	var projects = document.getElementsByClassName("project");
 	for (var i = 0; i < projects.length; i++) {
-		if(projects[i].dataset.title) {
-			console.log(projects[i].dataset.title);
+		if(projects[i].dataset.project) {
 			var waypoint = new Waypoint({
 				element: projects[i],
 				handler: function(direction) {
-					console.log(this.element.dataset.title + ' hit');
+					if (direction === "down") {
+						let scale = this.element.dataset.scale;
+						if (this.element.dataset.project == "offgrid") {
+							updateObject(offgrid, scale);
+						}
+						if (this.element.dataset.project == "julianjaschke") {
+							updateObject(julianjaschke, scale);
+						}
+						if (this.element.dataset.project == "todayssupply") {
+							updateObject(todayssupply, scale);
+						}
+						if (this.element.dataset.project == "reification") {
+							updateObject(reification, scale);
+						}
+						if (this.element.dataset.project == "radunion") {
+							updateObject(radunion, scale);
+						}
+						if (this.element.dataset.project == "trjfp") {
+							updateObject(trjfp, scale);
+						}
+					}
 				},
 				offset: 70 
 			});
+			var waypoint = new Waypoint({
+				element: projects[i],
+				handler: function(direction) {
+					if (direction === "up") {
+						let scale = this.element.dataset.scale;
+						if (this.element.dataset.project == "offgrid") {
+							updateObject(offgrid, scale);
+						}
+						if (this.element.dataset.project == "julianjaschke") {
+							updateObject(julianjaschke, scale);
+						}
+						if (this.element.dataset.project == "todayssupply") {
+							updateObject(todayssupply, scale);
+						}
+						if (this.element.dataset.project == "reification") {
+							updateObject(reification, scale);
+						}
+						if (this.element.dataset.project == "radunion") {
+							updateObject(radunion, scale);
+						}
+						if (this.element.dataset.project == "trjfp") {
+							updateObject(trjfp, scale);
+						}
+					}
+				},
+				offset: -150 
+			});
+		} else {
+			
 		}
 	}
 
