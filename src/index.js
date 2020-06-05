@@ -14,6 +14,7 @@ import todayssupply from './assets/models/globe.glb';
 import reification from './assets/models/mutualism.glb';
 import radunion from './assets/models/rad.glb';
 import trjfp from './assets/models/apple.glb';
+import { log } from 'util';
 
 let modelArray = {
 	"offgrid": offgrid,
@@ -24,9 +25,11 @@ let modelArray = {
 	"trjfp": trjfp
 }
 
+let modelQueue = [];
+let modelQueueIndex = 0;
+
 let isOpen = false;
 let isAlerted = false;
-let isBottom = false;
 
 window.mobileCheck = function() {
 	let check = false;
@@ -69,8 +72,8 @@ $(document).ready(function() {
 					handler: function(direction) {
 						if (direction === "down") {
 							let scale = this.element.dataset.scale;
-							updateObject(modelArray[this.element.dataset.project], scale);
-							console.log(this.element.dataset.project);
+							let title = modelArray[this.element.dataset.project];
+							modelQueue.push([title, scale]);
 						}
 					},
 					offset: 70 
@@ -80,8 +83,8 @@ $(document).ready(function() {
 					handler: function(direction) {
 						if (direction === "up") {
 							let scale = this.element.dataset.scale;
-							updateObject(modelArray[this.element.dataset.project], scale);
-							console.log(this.element.dataset.project);
+							let title = modelArray[this.element.dataset.project];
+							modelQueue.push([title, scale]);
 						}
 					},
 					offset: -150 
@@ -100,7 +103,8 @@ $(document).ready(function() {
 					handler: function(direction) {
 						if (direction === "down") {
 							let scale = this.element.dataset.scale;
-							updateObject(modelArray[this.element.dataset.project], scale);
+							let title = modelArray[this.element.dataset.project];
+							modelQueue.push([title, scale]);
 						}
 					},
 					offset: 150 
@@ -110,7 +114,8 @@ $(document).ready(function() {
 					handler: function(direction) {
 						if (direction === "up") {
 							let scale = this.element.dataset.scale;
-							updateObject(modelArray[this.element.dataset.project], scale);
+							let title = modelArray[this.element.dataset.project];
+							modelQueue.push([title, scale]);
 						}
 					},
 					offset: -150 
@@ -120,6 +125,15 @@ $(document).ready(function() {
 			}
 		}
 	}
+
+	window.setInterval(function() {
+		if (modelQueue.length > 0) {
+			updateObject(modelQueue[0][0], modelQueue[0][1]);
+			modelQueue.shift();
+			console.log(modelQueue);
+			
+		}
+	}, 200);
 	
 	$('#theme').on('change', function() {
 		if ($(this).val() == "light") {

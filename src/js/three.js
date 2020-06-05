@@ -44,16 +44,12 @@ function init() {
     light.position.set(500, 500, 500);
     scene.add(light);
  
-    var light = new THREE.PointLight(0xffffff, 0.75);
-    light.position.set(-500, -500, -500);
-    scene.add(light);
-
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(container.offsetWidth, container.offsetHeight);
 
     effect = new AsciiEffect(renderer, ' .:-+*joeqj=(){}/%@#', { invert: true });
     effect.setSize(container.offsetWidth, container.offsetHeight);
-    
+    effect.domElement.style.fontSize = "5";
     var currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
     if (currentTheme) {
         changeTheme(currentTheme);
@@ -89,6 +85,10 @@ function render() {
         objPivot.rotation.y += 0.01;   
     }
 
+    if(scene.children.length > 2) {
+        scene.remove(scene.children[1]);
+    }
+
     camera.position.x += (mouseX / 300 - camera.position.x) * 0.05;
     camera.position.y += (-mouseY / 50 - camera.position.y) * 0.05;
     camera.lookAt(scene.position);
@@ -108,9 +108,8 @@ function onWindowResize() {
 }
 
 export const removeObject = (path) => {
-    if (obj.name != path) { 
-        scene.remove(scene.children[2]);
-        scene.remove(scene.children[3]);
+    for (let i = 1; i < 10; i++) {
+        scene.remove(scene.children[i]);
     }
 }
 
@@ -119,9 +118,9 @@ export const addObject = (path, scale) => {
 }
 
 export const updateObject = (path, scale) => {
+    removeObject(path);
     if (obj) {
         if (obj.name != path) {
-            removeObject(path);
             handleObject(path, scale);
         }
     }
@@ -149,6 +148,9 @@ const handleObject = (path, scale) => {
         objPivot = new THREE.Group();
         scene.add(objPivot);
         objPivot.add(obj);
+
+        console.log(scene);
+        
     },
         (xhr) => {
             // console.log(`${( xhr.loaded / xhr.total * 100 )}% loaded`);
