@@ -118,9 +118,9 @@ export const addObject = (path, scale) => {
 }
 
 export const updateObject = (path, scale) => {
-    removeObject(path);
     if (obj) {
         if (obj.name != path) {
+            removeObject(path);
             handleObject(path, scale);
         }
     }
