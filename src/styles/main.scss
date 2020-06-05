@@ -70,8 +70,10 @@ body {
 .app {
     transition: all .4s ease-in-out;
     width: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
+    @media (min-width: 750px) {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
     @media (min-width: 991px) {
         width: 90%;
     }
@@ -118,9 +120,11 @@ h1, h2, h3, h4 {
 }
 
 h2.projects {
-    @media screen and (max-width: 750px) {
-        position: sticky;
-        top: 2rem;
+    position: sticky;
+    top: 2rem;
+    @media (min-width:750px) {
+        position: relative;
+        top: 0;
     }
 }
 
