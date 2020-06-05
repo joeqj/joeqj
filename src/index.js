@@ -14,6 +14,15 @@ import reification from './assets/models/mutualism.glb';
 import radunion from './assets/models/rad.glb';
 import trjfp from './assets/models/apple.glb';
 
+let modelArray = {
+	"offgrid": offgrid,
+	"julianjaschke": julianjaschke,
+	"todayssupply": todayssupply,
+	"reification": reification,
+	"radunion": radunion,
+	"trjfp": trjfp
+}
+
 let isOpen = false;
 let isAlerted = false;
 
@@ -46,24 +55,7 @@ $(document).ready(function() {
 				handler: function(direction) {
 					if (direction === "down") {
 						let scale = this.element.dataset.scale;
-						if (this.element.dataset.project == "offgrid") {
-							updateObject(offgrid, scale);
-						}
-						if (this.element.dataset.project == "julianjaschke") {
-							updateObject(julianjaschke, scale);
-						}
-						if (this.element.dataset.project == "todayssupply") {
-							updateObject(todayssupply, scale);
-						}
-						if (this.element.dataset.project == "reification") {
-							updateObject(reification, scale);
-						}
-						if (this.element.dataset.project == "radunion") {
-							updateObject(radunion, scale);
-						}
-						if (this.element.dataset.project == "trjfp") {
-							updateObject(trjfp, scale);
-						}
+						updateObject(modelArray[this.element.dataset.project], scale);
 					}
 				},
 				offset: 70 
@@ -73,24 +65,7 @@ $(document).ready(function() {
 				handler: function(direction) {
 					if (direction === "up") {
 						let scale = this.element.dataset.scale;
-						if (this.element.dataset.project == "offgrid") {
-							updateObject(offgrid, scale);
-						}
-						if (this.element.dataset.project == "julianjaschke") {
-							updateObject(julianjaschke, scale);
-						}
-						if (this.element.dataset.project == "todayssupply") {
-							updateObject(todayssupply, scale);
-						}
-						if (this.element.dataset.project == "reification") {
-							updateObject(reification, scale);
-						}
-						if (this.element.dataset.project == "radunion") {
-							updateObject(radunion, scale);
-						}
-						if (this.element.dataset.project == "trjfp") {
-							updateObject(trjfp, scale);
-						}
+						updateObject(modelArray[this.element.dataset.project], scale);
 					}
 				},
 				offset: -150 
