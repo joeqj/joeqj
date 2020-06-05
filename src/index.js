@@ -76,7 +76,7 @@ $(document).ready(function() {
 							modelQueue.push([title, scale]);
 						}
 					},
-					offset: 70 
+					offset: 125 
 				});
 				var waypoint = new Waypoint({
 					element: projects[i],
