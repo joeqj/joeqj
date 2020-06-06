@@ -147,10 +147,7 @@ const handleObject = (path, scale) => {
 
         objPivot = new THREE.Group();
         scene.add(objPivot);
-        objPivot.add(obj);
-
-        console.log(scene);
-        
+        objPivot.add(obj);        
     },
         (xhr) => {
             // console.log(`${( xhr.loaded / xhr.total * 100 )}% loaded`);
