@@ -11,7 +11,11 @@
   .columns {
     width: 100%;
     float: left;
-    box-sizing: border-box; }
+    box-sizing: border-box;
+    @media (min-width: 751px) {
+      transition:all .25s ease-in-out
+    }
+  }
   
   /* For devices larger than 400px */
   @media (min-width: 400px) {

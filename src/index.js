@@ -38,10 +38,6 @@ window.mobileCheck = function() {
 };
 
 $(document).ready(function() {
-	// Resizing
-	pushRight();
-	window.addEventListener('resize', pushRight);
-
 	// Devtools
     window.addEventListener('devtoolschange', event => {
 		isOpen = !isOpen;
@@ -157,11 +153,3 @@ $(document).ready(function() {
 	}
 	  
 });
-
-const pushRight = () => {
-	if (window.innerWidth < 768) {
-		$(".app").css("padding-left", "0px");
-	} else {
-		$(".app").css("padding-left", window.innerWidth / 35 + "px");
-	}
-}
