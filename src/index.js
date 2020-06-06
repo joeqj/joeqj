@@ -125,9 +125,7 @@ $(document).ready(function() {
 	window.setInterval(function() {
 		if (modelQueue.length > 0) {
 			updateObject(modelQueue[0][0], modelQueue[0][1]);
-			modelQueue.shift();
-			console.log(modelQueue);
-			
+			modelQueue.shift();		
 		}
 	}, 200);
 	
