@@ -1,6 +1,7 @@
 const HTMLWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     module: {
@@ -67,6 +68,11 @@ module.exports = {
             filename: "./index.html"
         }),
         new ExtractTextPlugin("styles.css"),
+        new CopyPlugin({
+            patterns: [
+              { from: 'src/title.html', to: 'title.html' },
+            ],
+          }),
         new MiniCssExtractPlugin({
             filename: "[name].css",
             chunkFilename: "[id],css"

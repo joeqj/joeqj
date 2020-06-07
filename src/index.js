@@ -14,7 +14,6 @@ import todayssupply from './assets/models/globe.glb';
 import reification from './assets/models/mutualism.glb';
 import radunion from './assets/models/rad.glb';
 import trjfp from './assets/models/apple.glb';
-import { log } from 'util';
 
 let modelArray = {
 	"offgrid": offgrid,
@@ -26,14 +25,9 @@ let modelArray = {
 }
 
 let modelQueue = [];
-let modelQueueIndex = 0;
 
 let isOpen = false;
 let isAlerted = false;
-
-let titleArray = [
-	
-];
 
 window.mobileCheck = function() {
 	let check = false;
@@ -43,7 +37,7 @@ window.mobileCheck = function() {
 
 $(document).ready(function() {
 	// Title population
-	$(".title").load("./src/title.html");
+	$(".title").load("title.html");
 
 	// Title hover exp
 	$(".title").on('click', function() {

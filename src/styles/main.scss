@@ -147,7 +147,10 @@ h1, h2, h3, h4 {
 
 h2.stick {
     position: sticky;
-    top: 4.65rem;
+    top: 2rem;
+    @media (min-width: 768px) {
+        top: 4.65rem;
+    }
 }
 
 a,
@@ -298,7 +301,7 @@ select {
     height: 100%;
     height: 100vh;
     pointer-events: all;
-    opacity: 0.3;
+    opacity: 0.2;
     -webkit-appearance: none;
     -moz-appearance: none;
     -o-appearance: none;
