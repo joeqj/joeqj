@@ -25,6 +25,7 @@ $l-link: #881280;
     --select-bg: #fafafa;
     --select-border: #c8c8c8;
     --highlight-color: #cfe8fc;
+    --ascii-text: #222222;
 }
 
 html {
@@ -34,6 +35,7 @@ html {
     --select-bg: #262626;
     --select-border: #4c4c4c;
     --highlight-color: #0b2544;
+    --ascii-text: #999999;
 }
 
 ::selection {
@@ -52,12 +54,10 @@ h1, h2, p, a {
     }
 }
 
-
 body {
     background: var(--background);
     font-family: 'Inter', sans-serif;
     transition: all .25s ease-in-out;
-    
     p {
         color: var(--text);
         font-weight: 650;
@@ -70,15 +70,11 @@ body {
 .app {
     transition: all .4s ease-in-out;
     width: 100%;
-    @media (min-width: 750px) {
-        overflow-x: hidden;
-        overflow-y: auto;
-    }
     @media (min-width: 991px) {
         width: 90%;
     }
     @media (min-width: 1280px) {
-        width: 65%;
+        width: 60%;
     }
     > .row > .columns {
         padding: 2.5rem 2rem 2rem;
@@ -86,6 +82,9 @@ body {
             padding:5rem 4.65rem
         }
         &.info {
+            @media screen and (max-width: 750px) {
+                overflow: hidden;
+            }
             .fixed {
                 @media (min-width: 750px) {
                     position: fixed;
@@ -103,8 +102,35 @@ body {
                     font-weight: 300;
                 }
             }
-            a {
-                display: block;
+            .title {
+                position: relative;
+                min-height: 187px;
+                margin-bottom: 10rem;
+                overflow-y: visible;
+                pre {
+                    cursor: pointer;
+                    position: absolute;
+                    opacity: 0;
+                    visibility: hidden;
+                    -webkit-touch-callout: none;
+                    -webkit-user-select: none;
+                    -khtml-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                    color: var(--text);
+                    font-size: 2vw;
+                    @media (min-width: 760px) {
+                        font-size: 1.1rem;
+                    }
+                    &.v {
+                        opacity: 1;
+                        visibility: visible;
+                    }
+                }
+            }
+            p, a {
+                display: table;
             }
         }
     }
@@ -119,13 +145,9 @@ h1, h2, h3, h4 {
     font-weight: 700;
 }
 
-h2.projects {
+h2.stick {
     position: sticky;
-    top: 2rem;
-    @media (min-width:750px) {
-        position: relative;
-        top: 0;
-    }
+    top: 4.65rem;
 }
 
 a,
@@ -178,13 +200,7 @@ a {
     .row {
         width: 100%;
         overflow-y: auto;
-        display: none;
-        @media (min-width: 700px) {
-            display: block;
-        }
-        &.preserve-mob {
-            display: block;
-        }
+
     }
     .column {
         float: left;
@@ -263,6 +279,9 @@ select {
             text-align: left;
             padding: 15rem 4.65rem 2rem !important;
         }
+        @media (min-width: 1200px) {
+            padding: 25rem 4.65rem 2rem !important;
+        }
         .notice {
             p {
                 margin-top: 1.75rem;
@@ -274,10 +293,17 @@ select {
 #canvas-element {
     position: fixed;
     z-index: -1;
-    width: 75%;
-    width: 75vw;
-    height: 50%;
-    height: 50vh;
+    width: 200%;
+    width: 200vw;
+    height: 100%;
+    height: 100vh;
+    pointer-events: all;
+    opacity: 0.3;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
     @media screen and (max-width: 750px) {
         top: 50%;
         left: 50%;
@@ -292,10 +318,11 @@ select {
         top: 50%;
         transform: translateY(-50%);
         display: block;
+        opacity: 1;
     }
     @media (min-width: 1300px) {
-        width: 57%;
-        width: 57vw;
+        width: 60%;
+        width: 60vw;
         height: 95%;
         height: 95vh;
         right: 0;
@@ -303,15 +330,33 @@ select {
         transform: translateY(-50%);
         display: block;
     }
-    @media only screen 
-        and (min-device-width : 768px) 
-        and (max-device-width : 1024px) 
-        and (orientation : portrait) { 
-            width: 100%;
-            right: 0;
-            opacity: 0.5;
+    @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) { 
+        width: 120%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.5;
+    }
+    #oAscii {
+        background: var(--background);
+        color: var(--ascii-text);
+        font-family: monospace;
+        font-size: 15px;
+        transition: color 1s ease-in-out;
+        letter-spacing: -1px;
+        &.morph {
+            color: var(--link);
+            letter-spacing: 0.15rem;
+            font-family: 'Inter', sans-serif;
         }
     }
+
+    &:hover {
+        #oAscii {
+            color: var(--text);
+        }
+    }   
+}
 
 #devtools-msg {
     position: fixed;

@@ -1,10 +1,9 @@
 import * as THREE from 'three';
 import { AsciiEffect } from 'three/examples/jsm/effects/AsciiEffect.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { log } from 'three';
 
 let container = document.getElementById("canvas-element");
-let camera, scene, renderer, effect;
+let camera, scene, renderer, effect, interaction;
 
 let obj, objPivot;
 
@@ -41,23 +40,15 @@ function init() {
     scene = new THREE.Scene();
 
     var light = new THREE.PointLight(0xffffff);
-    light.position.set(500, 500, 500);
+    light.position.set(-250, 500, 500);
     scene.add(light);
  
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(container.offsetWidth, container.offsetHeight);
 
-    effect = new AsciiEffect(renderer, ' .:-+*joeqj=(){}/%@#', { invert: true });
+    effect = new AsciiEffect(renderer, ' .:-+*joeqj!=(){}/%@#', { invert: true });
     effect.setSize(container.offsetWidth, container.offsetHeight);
-    effect.domElement.style.fontSize = "5";
-    var currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
-    if (currentTheme) {
-        changeTheme(currentTheme);
-    } else {
-        effect.domElement.style.color = '#999999';
-        effect.domElement.style.backgroundColor = '#1e1e1e';
-    }
-    
+
     container.appendChild(effect.domElement);
     // container.appendChild(renderer.domElement);
 
@@ -82,8 +73,9 @@ function render() {
     var time = Date.now() * 0.00005;
 
     if (obj) {
-        objPivot.rotation.y += 0.01;   
+        objPivot.rotation.y += 0.01;  
     }
+    
 
     if(scene.children.length > 2) {
         scene.remove(scene.children[1]);
@@ -147,7 +139,7 @@ const handleObject = (path, scale) => {
 
         objPivot = new THREE.Group();
         scene.add(objPivot);
-        objPivot.add(obj);        
+        objPivot.add(obj);
     },
         (xhr) => {
             // console.log(`${( xhr.loaded / xhr.total * 100 )}% loaded`);
@@ -156,4 +148,9 @@ const handleObject = (path, scale) => {
             console.error('An error occured when trying to load 3d Models', error);
         }
     );    
+}
+
+export const changeFont = (font) => {
+    effect = new AsciiEffect(renderer, ' .:-+*joeqj=(){}/%@#', { invert: true, font: font });
+    effect.setSize(container.offsetWidth, container.offsetHeight);
 }
