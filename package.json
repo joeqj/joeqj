@@ -24,7 +24,6 @@
     "mini-css-extract-plugin": "^0.9.0",
     "node-sass": "^4.14.1",
     "sass-loader": "^8.0.2",
-    "soundcloud": "^3.3.2",
     "style-loader": "^1.2.1",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
@@ -32,6 +31,7 @@
     "webpack-obj-loader": "^1.0.4"
   },
   "dependencies": {
+    "@tweenjs/tween.js": "^18.6.0",
     "gltf-webpack-loader": "^1.0.6",
     "jquery": "^3.5.1",
     "three": "^0.117.1",

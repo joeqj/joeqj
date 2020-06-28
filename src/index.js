@@ -67,10 +67,11 @@ $(document).ready(function() {
 
 		var parent = document.querySelector('.visible');
 		if(parent) {
-			var video = parent.children[0];
+			var video = parent.children[0];	
 			video.play();
 			if(video.nodeName === "VIDEO") {
-				addVideoBox(video);
+				var url = video.dataset.url;
+				addVideoBox(video, url);
 			} else {
 				handleObject(joeqj, 0.65);
 			}
