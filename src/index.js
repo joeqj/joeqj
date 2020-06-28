@@ -3,7 +3,7 @@ import './styles/skeleton.scss';
 import './styles/main.scss';
 
 import "./js/three.js";
-import { changeTheme, handleObject, updateObject, removeObject, addVideoBox } from "./js/three.js";
+import { handleObject, removeObject, addVideoBox, spotLightIn, spotLightOut } from "./js/three.js";
 
 import { codeArt004, removeCodeArt004 } from "./js/codeart/004.js";
 import { codeArt005, removeCodeArt005 } from "./js/codeart/005.js";
@@ -29,6 +29,7 @@ window.mobileCheck = function() {
 };
 
 $(document).ready(function() {
+
 	// Devtools
     window.addEventListener('devtoolschange', event => {
 		isOpen = !isOpen;
@@ -43,20 +44,27 @@ $(document).ready(function() {
 		} else {
 			isAlerted = false;
 		}
-	});	
+	});
 
-
+	// Waypoint
 	var music = document.getElementsByClassName("music");
-		for (var i = 0; i < music.length; i++) {
-			var waypoint = new Waypoint({
-				element: music[i],
-				handler: function(direction) {
-					// updateObject("green");
-				},
-				offset: 125 
-			});
-		}
+	for (var i = 0; i < music.length; i++) {
+		var waypoint = new Waypoint({
+			element: music[i],
+			handler: function(direction) {
+				if (direction == 'down') {					
+					if ($(".projects .title.active").length > 0) {
+						removeObject();
+						handleObject(joeqj, 0.65);
+						$(".projects .title.active").toggleClass("active").next(".info").toggleClass("visible").slideToggle();
+					}
+				}
+			},
+			offset: 125 
+		});
+	}
 
+	// Projects Accordion
 	$(".projects .title").on("click", function() {
 		$(this).toggleClass("active").next(".info").toggleClass("visible").slideToggle();
 		$(".main .title").not($(this)).removeClass("active");
@@ -77,25 +85,33 @@ $(document).ready(function() {
 		}
 
 		removeObject();
-		$("#canvas-element #codeArt").find("canvas").remove();
 
-		var parent = document.querySelector('.visible');
-		if(parent) {
-			var video = parent.children[0];	
-			video.play();
-			if(video.nodeName === "VIDEO") {
-				var url = video.dataset.url;
-				addVideoBox(video, url);
-			} else {
-				handleObject(joeqj, 0.65);
+		if($(this).hasClass("active")) {
+			var parent = document.querySelector('.visible');
+			var video;
+			if(parent) {
+				video = parent.children[0];	
+				video.play();
+				if(video.nodeName === "VIDEO") {
+					removeObject();
+					var url = video.dataset.url;
+					addVideoBox(video, url);
+				} else {
+					removeObject();
+					handleObject(joeqj, 0.65);
+				}
 			}
 		} else {
+			video = null;
+			removeObject();
 			handleObject(joeqj, 0.65);
 		}
 	});
 
+	// Code Art
 	$(".codeart .title").on("click", function() {
-		$(".codeart .title").not($(this)).removeClass("active");		
+		$(".main .title").not($(this)).removeClass("active");
+		$(".projects .title").not($(this)).next().removeClass("visible").slideUp();	
 		if ($("#canvas-element #codeArt").find("canvas").length > 0) {
 			var id = $("#canvas-element #codeArt").find("canvas").attr("id");
 			switch (id) {
@@ -109,7 +125,6 @@ $(document).ready(function() {
 					break;
 			}			
 		}
-		
 		if($(this).hasClass("active")) {
 			$(this).removeClass("active");
 		} else {
@@ -123,11 +138,9 @@ $(document).ready(function() {
 						codeArt005();
 						break;
 				}
-				
+				removeObject();
+				handleObject(joeqj, 0.65);
 			}
 		}
 	});
-	
-	
-	  
 });

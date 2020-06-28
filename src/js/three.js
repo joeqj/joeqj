@@ -8,10 +8,10 @@ import joeqj from '../assets/models/joeqj.glb';
 const container = document.getElementById("canvas-element");
 
 let camera, renderer, scene;
-let tweenIn, tweenOut;
-
-let obj, objPivot, light;
+let light, spotlight;
+let obj, objPivot;
 let videoBox;
+let tweenIn, tweenOut, spotlightTweenIn, spotlightTweenOut;
 
 let isZoomed = false;
 
@@ -33,6 +33,7 @@ export const handleObject = (path, scale) => {
             color: 0x2194CE,
             opacity: 0.75,
             transparent: true,
+            envMap: camera.renderTarget
         });
 
         obj.traverse((o) => {
@@ -89,6 +90,26 @@ function init() {
 
     light = new THREE.HemisphereLight( 0xffffbb, 0x080820, 1 );
     scene.add(light);
+
+    spotlight = new THREE.SpotLight( 0xff8787, 1 );
+    spotlight.position.set( 15, 200, 35 );
+    spotlight.angle = Math.PI / 4;
+    spotlight.penumbra = 1;
+    spotlight.decay = 1;
+    spotlight.distance = 200;
+
+    spotlight.castShadow = true;
+    spotlight.shadow.mapSize.width = 1024;
+    spotlight.shadow.mapSize.height = 1024;
+    spotlight.shadow.camera.near = 10;
+    spotlight.shadow.camera.far = 200;
+    scene.add(spotlight);
+
+    spotlightTweenIn = new TWEEN.Tween(spotlight.position);
+    spotlightTweenIn.easing(TWEEN.Easing.Cubic.InOut);
+
+    spotlightTweenOut = new TWEEN.Tween(spotlight.position);
+    spotlightTweenOut.easing(TWEEN.Easing.Cubic.InOut);
 
     handleObject(joeqj, 0.65);
  
