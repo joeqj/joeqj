@@ -3,25 +3,15 @@ import './styles/skeleton.scss';
 import './styles/main.scss';
 
 import "./js/three.js";
-import { changeTheme, addObject, updateObject } from "./js/three.js";
+import { changeTheme, handleObject, updateObject, removeObject, addVideoBox } from "./js/three.js";
 
 import 'waypoints/lib/noframework.waypoints.js';
-import "./js/devtools.js";
+// import "./js/devtools.js";
 
-import offgrid from './assets/models/oganimation.glb';
-import julianjaschke from './assets/models/cross.glb';
-import todayssupply from './assets/models/globe.glb';
-import reification from './assets/models/mutualism.glb';
-import radunion from './assets/models/rad.glb';
-import trjfp from './assets/models/apple.glb';
+import joeqj from './assets/models/joeqj.glb';
 
 let modelArray = {
-	"offgrid": offgrid,
-	"julianjaschke": julianjaschke,
-	"todayssupply": todayssupply,
-	"reification": reification,
-	"radunion": radunion,
-	"trjfp": trjfp
+	"joeqj": joeqj
 }
 
 let modelQueue = [];
@@ -36,22 +26,6 @@ window.mobileCheck = function() {
 };
 
 $(document).ready(function() {
-	// Title population
-	$(".title").load("title.html");
-
-	// Title hover exp
-	$(".title").on('click', function() {
-		$('.title > pre').each(function () {
-			if ($(this).hasClass("v")) {
-				$(this).removeClass("v");
-			} else {
-				$(this).addClass("v");
-			}
-			
-		});
-		$("#oAscii").toggleClass("morph");
-	});
-	
 	// Devtools
     window.addEventListener('devtoolschange', event => {
 		isOpen = !isOpen;
@@ -68,102 +42,62 @@ $(document).ready(function() {
 		}
 	});	
 
-	setTimeout(function() {
-		addObject(offgrid, 2);
-	},250);
 
-	if (mobileCheck() === false) {
-		// Waypoints -- Desktop
-		var projects = document.getElementsByClassName("project");
-		for (var i = 0; i < projects.length; i++) {
-			if(projects[i].dataset.project) {
-				var waypoint = new Waypoint({
-					element: projects[i],
-					handler: function(direction) {
-						if (direction === "down") {
-							let scale = this.element.dataset.scale;
-							let title = modelArray[this.element.dataset.project];
-							modelQueue.push([title, scale]);
-						}
-					},
-					offset: 125 
-				});
-				var waypoint = new Waypoint({
-					element: projects[i],
-					handler: function(direction) {
-						if (direction === "up") {
-							let scale = this.element.dataset.scale;
-							let title = modelArray[this.element.dataset.project];
-							modelQueue.push([title, scale]);
-						}
-					},
-					offset: -150 
-				});
+	var music = document.getElementsByClassName("music");
+		for (var i = 0; i < music.length; i++) {
+			var waypoint = new Waypoint({
+				element: music[i],
+				handler: function(direction) {
+					// updateObject("green");
+				},
+				offset: 125 
+			});
+		}
+
+	$(".projects .title").on("click", function() {
+		$(this).toggleClass("active").next(".info").toggleClass("visible").slideToggle();
+		$(".main .title").not($(this)).removeClass("active").next().removeClass("visible").slideUp();
+
+		removeObject();
+		if($("#artframe").length) {
+			console.log("yo");
+			
+			$("#artframe").remove();
+		}
+
+		var parent = document.querySelector('.visible');
+		if(parent) {
+			var video = parent.children[0];
+			video.play();
+			if(video.nodeName === "VIDEO") {
+				addVideoBox(video);
 			} else {
-				
+				handleObject(joeqj, 0.65);
 			}
-		}
-	} else {
-		// Waypoints -- Mobile
-		var projects = document.getElementsByClassName("project");
-		for (var i = 0; i < projects.length; i++) {
-			if(projects[i].dataset.project) {
-				var waypoint = new Waypoint({
-					element: projects[i],
-					handler: function(direction) {
-						if (direction === "down") {
-							let scale = this.element.dataset.scale;
-							let title = modelArray[this.element.dataset.project];
-							modelQueue.push([title, scale]);
-						}
-					},
-					offset: 200 
-				});
-				var waypoint = new Waypoint({
-					element: projects[i],
-					handler: function(direction) {
-						if (direction === "up") {
-							let scale = this.element.dataset.scale;
-							let title = modelArray[this.element.dataset.project];
-							modelQueue.push([title, scale]);
-						}
-					},
-					offset: -150 
-				});
-			} else {
-				
-			}
-		}
-	}
-
-	window.setInterval(function() {
-		if (modelQueue.length > 0) {
-			updateObject(modelQueue[0][0], modelQueue[0][1]);
-			modelQueue.shift();		
-		}
-	}, 200);
-
-	// oAscii.style = "font-family: 'Inter', sans-serif; font-size: 5px";
-	
-	$('#theme').on('change', function() {
-		if ($(this).val() == "light") {
-			document.documentElement.setAttribute('data-theme', 'light');
-			localStorage.setItem('theme', 'light');
-			changeTheme("light");
 		} else {
-			document.documentElement.setAttribute('data-theme', 'dark');
-			localStorage.setItem('theme', 'dark');
-			changeTheme("dark");
-		}	
+			handleObject(joeqj, 0.65);
+		}
 	});
 
-	const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
-	if (currentTheme) {
-		$('#theme').val(currentTheme);
-	}
+	$(".codeart .title").on("click", function() {
+		// $(this).next(".info").toggleClass("visible").slideToggle();
+		// $(".main .title").not($(this)).removeClass("active").next().removeClass("visible").slideUp();
+		if($(this).hasClass("active")) {
+			$(this).removeClass("active");
+			$("#artframe").remove();
+		} else {
+			$("#canvas-element").append('<iframe src="' + this.dataset.url + '" frameborder="0" id="artframe" scrolling="no"></iframe>');
+			$(this).addClass("active");
+			var iframepos = $("#artframe").position();
 
-	if (currentTheme) {
-		document.documentElement.setAttribute('data-theme', currentTheme);
-	}
+			$('#artframe').contents().find('html').on('mousemove', function (e) { 
+				var x = e.clientX + iframepos.left; 
+				var y = e.clientY + iframepos.top;
+				console.log(x + " " + y);
+			})
+		}
+	});
+	
+	
 	  
 });

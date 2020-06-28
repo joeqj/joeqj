@@ -29,7 +29,7 @@ module.exports = {
                     ]
             },
             {
-                test: /\.(jpg|png|glb)$/,
+                test: /\.(jpg|png|glb|mp4)$/,
                 use: [
                     'file-loader'
                 ]
@@ -52,6 +52,10 @@ module.exports = {
                 ]
             },
             {
+                test: /\.obj$/,
+                loader: 'webpack-obj-loader'
+            },
+            {
                 test: /\.(bin)$/,
                 use: [
                     {
@@ -71,8 +75,9 @@ module.exports = {
         new CopyPlugin({
             patterns: [
               { from: 'src/title.html', to: 'title.html' },
+              { from: 'src/assets/images/joeqj.png', to: 'joeqj.png' },
             ],
-          }),
+        }),
         new MiniCssExtractPlugin({
             filename: "[name].css",
             chunkFilename: "[id],css"
