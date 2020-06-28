@@ -5,8 +5,9 @@ import TWEEN from '@tweenjs/tween.js';
 
 import joeqj from '../assets/models/joeqj.glb';
 
-let container = document.getElementById("canvas-element");
-let camera, scene, renderer, effect;
+const container = document.getElementById("canvas-element");
+
+let camera, renderer, scene;
 let tweenIn, tweenOut;
 
 let obj, objPivot, light;
@@ -84,7 +85,6 @@ function init() {
     tweenOut = new TWEEN.Tween(camera.position);
     tweenOut.easing(TWEEN.Easing.Cubic.In);
     
-
     scene = new THREE.Scene();
 
     light = new THREE.HemisphereLight( 0xffffbb, 0x080820, 1 );
@@ -118,7 +118,7 @@ function onDocumentMouseMove(event) {
 }
 
 function onDocumentMouseDown(event) {
-    var intersects = raycaster.intersectObjects( scene.children );
+    var intersects = raycaster.intersectObjects(scene.children);
     if (intersects.length > 0) {
         window.open(intersects[0].object.name, '_blank');        
     }
@@ -133,12 +133,8 @@ function animate() {
 function render() {
     var time = Date.now() * 0.00005;
 
-    if(scene.children.length > 2) {
-        scene.remove(scene.children[1]);
-    }
-
     raycaster.setFromCamera( pickingMouse, camera );
-    var intersects = raycaster.intersectObjects( scene.children );
+    var intersects = raycaster.intersectObjects(scene.children);
     if (intersects.length > 0) {
         // camera.position.z = 3.6;
         $('html, body').css('cursor', 'pointer');
@@ -164,26 +160,33 @@ function render() {
     camera.position.y += (-mouseY / 50 - camera.position.y) * 0.05;
     camera.lookAt(scene.position);
 
-    renderer.render( scene, camera );
+    renderer.autoClear = true;
+    renderer.render(scene, camera);
 }
 
 function onWindowResize() {
     windowHalfX = container.offsetWidth / 2;
     windowHalfY = container.offsetHeight / 2;
     camera.updateProjectionMatrix();
-    renderer.setSize( container.offsetWidth, container.offsetHeight );
+    renderer.setSize(container.offsetWidth, container.offsetHeight);
 }
 
 export const removeObject = () => {
-    scene.remove(objPivot);
-    scene.remove(videoBox);
+    if(objPivot != null) {
+        scene.remove(objPivot);
+        objPivot = null;
+    }
+    if (videoBox != null) {
+        scene.remove(videoBox);
+        videoBox = null;
+    }
 }
 
 export const addVideoBox = (video, url) => {
-    let texture = new THREE.VideoTexture(video);
-    let parameters = { color: 0xffffff, map: texture };
-    let geometry = new THREE.BoxGeometry(3, 1.75, 3);
-    let material = new THREE.MeshBasicMaterial(parameters);
+    var texture = new THREE.VideoTexture(video);
+    var parameters = { color: 0xffffff, map: texture };
+    var geometry = new THREE.BoxGeometry(3, 1.75, 3);
+    var material = new THREE.MeshBasicMaterial(parameters);
     videoBox = new THREE.Mesh(geometry, material);
     videoBox.name = url;
     scene.add(videoBox);    

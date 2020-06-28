@@ -5,6 +5,9 @@ import './styles/main.scss';
 import "./js/three.js";
 import { changeTheme, handleObject, updateObject, removeObject, addVideoBox } from "./js/three.js";
 
+import { codeArt004, removeCodeArt004 } from "./js/codeart/004.js";
+import { codeArt005, removeCodeArt005 } from "./js/codeart/005.js";
+
 import 'waypoints/lib/noframework.waypoints.js';
 // import "./js/devtools.js";
 
@@ -56,14 +59,25 @@ $(document).ready(function() {
 
 	$(".projects .title").on("click", function() {
 		$(this).toggleClass("active").next(".info").toggleClass("visible").slideToggle();
-		$(".main .title").not($(this)).removeClass("active").next().removeClass("visible").slideUp();
+		$(".main .title").not($(this)).removeClass("active");
+		$(".projects .title").not($(this)).next().removeClass("visible").slideUp();
+
+		if ($("#canvas-element #codeArt").find("canvas").length > 0) {
+			var id = $("#canvas-element #codeArt").find("canvas").attr("id");
+			switch (id) {
+				case "004":
+					removeCodeArt004();
+					$("#canvas-element #codeArt").find("canvas").remove();
+					break;
+				case "005":
+					removeCodeArt005();
+					$("#canvas-element #codeArt").find("canvas").remove();
+					break;
+			}			
+		}
 
 		removeObject();
-		if($("#artframe").length) {
-			console.log("yo");
-			
-			$("#artframe").remove();
-		}
+		$("#canvas-element #codeArt").find("canvas").remove();
 
 		var parent = document.querySelector('.visible');
 		if(parent) {
@@ -81,21 +95,36 @@ $(document).ready(function() {
 	});
 
 	$(".codeart .title").on("click", function() {
-		// $(this).next(".info").toggleClass("visible").slideToggle();
-		// $(".main .title").not($(this)).removeClass("active").next().removeClass("visible").slideUp();
+		$(".codeart .title").not($(this)).removeClass("active");		
+		if ($("#canvas-element #codeArt").find("canvas").length > 0) {
+			var id = $("#canvas-element #codeArt").find("canvas").attr("id");
+			switch (id) {
+				case "004":
+					removeCodeArt004();
+					$("#canvas-element #codeArt").find("canvas").remove();
+					break;
+				case "005":
+					removeCodeArt005();
+					$("#canvas-element #codeArt").find("canvas").remove();
+					break;
+			}			
+		}
+		
 		if($(this).hasClass("active")) {
 			$(this).removeClass("active");
-			$("#artframe").remove();
 		} else {
-			$("#canvas-element").append('<iframe src="' + this.dataset.url + '" frameborder="0" id="artframe" scrolling="no"></iframe>');
 			$(this).addClass("active");
-			var iframepos = $("#artframe").position();
-
-			$('#artframe').contents().find('html').on('mousemove', function (e) { 
-				var x = e.clientX + iframepos.left; 
-				var y = e.clientY + iframepos.top;
-				console.log(x + " " + y);
-			})
+			if ($(this).data("art")) {
+				switch($(this).data("art")) {
+					case "004":
+						codeArt004();
+						break;
+					case "005":
+						codeArt005();
+						break;
+				}
+				
+			}
 		}
 	});
 	
