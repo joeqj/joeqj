@@ -16,7 +16,7 @@ let mouseX005 = 0;
 let mouseY005 = 0;
 
 export const codeArt005 = () => {
-    codeArtcamera = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
+    codeArtcamera = new THREE.PerspectiveCamera(-75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
     codeArtcamera.position.z = 18.95;
 
     for(let i = 0; i < amount; i++) {
