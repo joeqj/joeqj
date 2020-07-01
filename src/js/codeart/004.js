@@ -9,6 +9,8 @@ let opacity = 0.075;
 
 let codeArtrenderer, codeArtcamera, codeArtanimation;
 
+let geometry004, material004;
+
 export const codeArt004 = () => {
   codeArtcamera = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
 
@@ -20,15 +22,15 @@ export const codeArt004 = () => {
     lightArray[i] = new THREE.DirectionalLight(0xffffff, 0.85);
     sceneArray[i].add(lightArray[i]);
 
-    let geometry = new THREE.BoxGeometry(container.offsetHeight / 1000, container.offsetHeight / 1000, container.offsetHeight / 1000);
-    geometry.verticesNeedUpdate = true;
-    let material = new THREE.MeshPhongMaterial({
+    geometry004 = new THREE.BoxGeometry(container.offsetHeight / 1000, container.offsetHeight / 1000, container.offsetHeight / 1000);
+    geometry004.verticesNeedUpdate = true;
+    material004 = new THREE.MeshPhongMaterial({
       color: 0x2194CE,
       opacity: opacity,
       transparent: true });
 
     opacity += 0.001;
-    cubeArray[i] = new THREE.Mesh(geometry, material);
+    cubeArray[i] = new THREE.Mesh(geometry004, material004);
     sceneArray[i].add(cubeArray[i]);
   }
 
@@ -64,5 +66,7 @@ export const removeCodeArt004 = () => {
   opacity = 0.075;
   codeArtrenderer = null;
   codeArtcamera = null;
+  geometry004.dispose();
+  material004.dispose();
   cancelAnimationFrame(codeArtanimation);  
 }

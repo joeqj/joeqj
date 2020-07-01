@@ -15,6 +15,8 @@ let windowHalfY005 = window.innerHeight / 2;
 let mouseX005 = 0;
 let mouseY005 = 0;
 
+let geometry005, material005;
+
 export const codeArt005 = () => {
     codeArtcamera = new THREE.PerspectiveCamera(-75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
     codeArtcamera.position.z = 18.95;
@@ -27,8 +29,8 @@ export const codeArt005 = () => {
     lightArray[i] = new THREE.DirectionalLight(0xffffff, 0.85);
     sceneArray[i].add(lightArray[i]);
     
-    var geometry = new THREE.TorusGeometry();
-    var material = new THREE.MeshPhongMaterial({ 
+    geometry005 = new THREE.TorusGeometry();
+    material005 = new THREE.MeshPhongMaterial({ 
         color: 0x00d62f,
         opacity: opacity,
         transparent: true,
@@ -36,7 +38,7 @@ export const codeArt005 = () => {
     
     opacity += 0.001;
 
-    cubeArray[i] = new THREE.Mesh(geometry, material);
+    cubeArray[i] = new THREE.Mesh(geometry005, material005);
     sceneArray[i].add(cubeArray[i]);
     }
 
@@ -79,5 +81,7 @@ export const removeCodeArt005 = () => {
     opacity = 0.075;
     codeArtrenderer = null;
     codeArtcamera = null;
+    geometry005.dispose();
+    material005.dispose();
     cancelAnimationFrame(codeArtanimation);
   }

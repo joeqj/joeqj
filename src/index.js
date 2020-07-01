@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import './styles/skeleton.scss';
+
 import './styles/main.scss';
 
 import "./js/three.js";
@@ -15,7 +15,7 @@ import joeqj from './assets/models/joeqj.glb';
 
 let modelArray = {
 	"joeqj": joeqj
-}
+};
 
 let modelQueue = [];
 
@@ -55,7 +55,7 @@ $(document).ready(function() {
 				if (direction == 'down') {					
 					if ($(".projects .title.active").length > 0) {
 						removeObject();
-						handleObject(joeqj, 0.65);
+						handleObject(joeqj);
 						$(".projects .title.active").toggleClass("active").next(".info").toggleClass("visible").slideToggle();
 					}
 				}
@@ -86,27 +86,27 @@ $(document).ready(function() {
 
 		removeObject();
 
+		var video = $(this).next(".visible").find("video");
+
 		if($(this).hasClass("active")) {
-			var parent = document.querySelector('.visible');
-			var video;
-			if(parent) {
-				video = parent.children[0];	
-				video.play();
-				if(video.nodeName === "VIDEO") {
-					removeObject();
-					var url = video.dataset.url;
-					addVideoBox(video, url);
-				} else {
-					removeObject();
-					handleObject(joeqj, 0.65);
-				}
+			if (video) {
+				video[0].play();
+				removeObject();
+				var url = video.data("url");
+				addVideoBox(video[0], url);	
 			}
 		} else {
-			video = null;
 			removeObject();
-			handleObject(joeqj, 0.65);
+			handleObject(joeqj);
 		}
 	});
+
+	$("#privacy, .privacy .wrap").on("click", function(event) {
+		if (event.target === this) {
+			event.preventDefault();
+			$(".privacy").toggleClass("visible");
+		}		
+	})
 
 	// Code Art
 	$(".codeart .title").on("click", function() {
@@ -139,7 +139,7 @@ $(document).ready(function() {
 						break;
 				}
 				removeObject();
-				handleObject(joeqj, 0.65);
+				handleObject(joeqj);
 			}
 		}
 	});

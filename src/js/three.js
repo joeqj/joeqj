@@ -9,14 +9,15 @@ const container = document.getElementById("canvas-element");
 
 let camera, renderer, scene;
 let light, spotlight;
-let obj, objPivot;
-let videoBox;
+let obj, objGroup, objMesh, objBox;
+let videoBox, videoBoxTexture, videoBoxParameters, videoBoxGeometry, videoBoxMaterial;
 let tweenIn, tweenOut, spotlightTweenIn, spotlightTweenOut;
 
 let isZoomed = false;
 
 let windowHalfX = window.innerWidth / 2;
 let windowHalfY = window.innerHeight / 2;
+let windowBreakPoint = 1100;
 let mouseX = 0;
 let mouseY = 0;
 let raycaster, pickingMouse;
@@ -24,28 +25,36 @@ let raycaster, pickingMouse;
 export const handleObject = (path, scale) => {
     let loader = new GLTFLoader();
     loader.load(path, gltf => {
-        gltf.scene.scale.set(scale, scale, scale);
-
         obj = gltf.scene;
         obj.name = String(path);
 
-        var mesh = new THREE.MeshPhongMaterial({ 
+        objMesh = new THREE.MeshPhongMaterial({ 
             color: 0x2194CE,
             opacity: 0.75,
             transparent: true,
-            envMap: camera.renderTarget
         });
 
         obj.traverse((o) => {
-            if (o.isMesh) o.material = mesh;
+            if (o.isMesh) o.material = objMesh;
         });
 
-        let box = new THREE.Box3().setFromObject(obj);
-        box.getCenter(obj.position); 
+        var box = new THREE.BoxHelper( obj, 0xffff00 );
+
+        objBox = new THREE.Box3().setFromObject(box);
+        objBox.getCenter(obj.position); 
         obj.position.multiplyScalar(- 1);
-        objPivot = new THREE.Group();
-        scene.add(objPivot);
-        objPivot.add(obj);
+
+        objGroup = new THREE.Group();
+        
+        if(scale) {
+            objGroup.scale.set(scale, scale, scale);
+        } else {
+            var size = container.offsetWidth / 1777;
+            objGroup.scale.set(size, size, size);
+        }
+        
+        scene.add(objGroup);
+        objGroup.add(obj);
     },
         (xhr) => {
             // console.log(`${( xhr.loaded / xhr.total * 100 )}% loaded`);
@@ -111,7 +120,7 @@ function init() {
     spotlightTweenOut = new TWEEN.Tween(spotlight.position);
     spotlightTweenOut.easing(TWEEN.Easing.Cubic.InOut);
 
-    handleObject(joeqj, 0.65);
+    handleObject(joeqj);
  
     renderer = new THREE.WebGLRenderer({ alpha: true });
     renderer.setClearColor(0x000000, 0);
@@ -140,7 +149,7 @@ function onDocumentMouseMove(event) {
 
 function onDocumentMouseDown(event) {
     var intersects = raycaster.intersectObjects(scene.children);
-    if (intersects.length > 0) {
+    if (intersects.length > 0 && window.innerWidth > windowBreakPoint) {
         window.open(intersects[0].object.name, '_blank');        
     }
 }
@@ -158,7 +167,9 @@ function render() {
     var intersects = raycaster.intersectObjects(scene.children);
     if (intersects.length > 0) {
         // camera.position.z = 3.6;
-        $('html, body').css('cursor', 'pointer');
+        if (window.innerWidth > windowBreakPoint) {
+            $('html, body').css('cursor', 'pointer');
+        }
         if(isZoomed === false) {
             tweenIn.to({z: 3.6}, 420)
             .start()
@@ -179,7 +190,7 @@ function render() {
 
     camera.position.x += (mouseX / 300 - camera.position.x) * 0.1;
     camera.position.y += (-mouseY / 50 - camera.position.y) * 0.05;
-    camera.lookAt(scene.position);
+    camera.lookAt(scene.position);    
 
     renderer.autoClear = true;
     renderer.render(scene, camera);
@@ -189,26 +200,59 @@ function onWindowResize() {
     windowHalfX = container.offsetWidth / 2;
     windowHalfY = container.offsetHeight / 2;
     camera.updateProjectionMatrix();
+    if(objGroup != null) {
+        fitCameraToObject(camera, objGroup, 0.5);
+    }
     renderer.setSize(container.offsetWidth, container.offsetHeight);
 }
 
+function fitCameraToObject( camera, object, offset ) {
+
+    offset = offset || 1.5;
+    
+    const boundingBox = new THREE.Box3();
+    
+    boundingBox.setFromObject( object );
+    
+    const center = boundingBox.getCenter( new THREE.Vector3() );
+    const size = boundingBox.getSize( new THREE.Vector3() );
+    
+    const startDistance = center.distanceTo(camera.position);
+    // here we must check if the screen is horizontal or vertical, because camera.fov is
+    // based on the vertical direction.
+    const endDistance = camera.aspect > 1 ?
+                        ((size.y/2)+offset) / Math.abs(Math.tan(camera.fov/2)) :
+                        ((size.y/2)+offset) / Math.abs(Math.tan(camera.fov/2)) / camera.aspect ;
+    
+    
+    camera.position.set(
+        camera.position.x * endDistance / startDistance,
+        camera.position.y * endDistance / startDistance,
+        camera.position.z * endDistance / startDistance,
+        );
+    camera.lookAt(center);
+}
+
 export const removeObject = () => {
-    if(objPivot != null) {
-        scene.remove(objPivot);
-        objPivot = null;
+    if(objGroup != null) {
+        scene.remove(objGroup);
+        objGroup = null;
     }
     if (videoBox != null) {
         scene.remove(videoBox);
+        videoBoxTexture.dispose();
+        videoBoxGeometry.dispose();
+        videoBoxMaterial.dispose();
         videoBox = null;
     }
 }
 
 export const addVideoBox = (video, url) => {
-    var texture = new THREE.VideoTexture(video);
-    var parameters = { color: 0xffffff, map: texture };
-    var geometry = new THREE.BoxGeometry(3, 1.75, 3);
-    var material = new THREE.MeshBasicMaterial(parameters);
-    videoBox = new THREE.Mesh(geometry, material);
+    videoBoxTexture = new THREE.VideoTexture(video);
+    videoBoxParameters = { color: 0xffffff, map: videoBoxTexture };
+    videoBoxGeometry = new THREE.BoxGeometry(3, 1.75, 3);
+    videoBoxMaterial = new THREE.MeshBasicMaterial(videoBoxParameters);
+    videoBox = new THREE.Mesh(videoBoxGeometry, videoBoxMaterial);
     videoBox.name = url;
     scene.add(videoBox);    
 }
