@@ -3,13 +3,12 @@ import $ from 'jquery';
 import './styles/main.scss';
 
 import "./js/three.js";
-import { handleObject, removeObject, addVideoBox, spotLightIn, spotLightOut } from "./js/three.js";
+import { init, handleObject, removeObject, addVideoBox, spotLightIn, spotLightOut } from "./js/three.js";
 
 import { codeArt004, removeCodeArt004 } from "./js/codeart/004.js";
 import { codeArt005, removeCodeArt005 } from "./js/codeart/005.js";
 
 import 'waypoints/lib/noframework.waypoints.js';
-// import "./js/devtools.js";
 
 import joeqj from './assets/models/joeqj.glb';
 
@@ -19,7 +18,6 @@ let modelArray = {
 
 let modelQueue = [];
 
-let isOpen = false;
 let isAlerted = false;
 
 window.mobileCheck = function() {
@@ -29,22 +27,6 @@ window.mobileCheck = function() {
 };
 
 $(document).ready(function() {
-
-	// Devtools
-    window.addEventListener('devtoolschange', event => {
-		isOpen = !isOpen;
-		if (isOpen === true && isAlerted === false) {
-			$("#devtools-msg").fadeIn(1000, function() {
-				var that = this;
-				setTimeout(function() {
-					$(that).fadeOut(1000);
-				}, 500);
-			})
-			isAlerted = true;
-		} else {
-			isAlerted = false;
-		}
-	});
 
 	// Waypoint
 	var music = document.getElementsByClassName("music");
@@ -76,28 +58,33 @@ $(document).ready(function() {
 				case "004":
 					removeCodeArt004();
 					$("#canvas-element #codeArt").find("canvas").remove();
+					init(false);
 					break;
 				case "005":
 					removeCodeArt005();
 					$("#canvas-element #codeArt").find("canvas").remove();
+					init(false);
 					break;
-			}			
+			}
+			
 		}
-
-		removeObject();
 
 		var video = $(this).next(".visible").find("video");
 
 		if($(this).hasClass("active")) {
 			if (video) {
 				video[0].play();
-				removeObject();
+				setTimeout(function() {
+					removeObject();
 				var url = video.data("url");
 				addVideoBox(video[0], url);	
+				},10);
 			}
 		} else {
-			removeObject();
-			handleObject(joeqj);
+			setTimeout(function() {
+				removeObject();
+				handleObject(joeqj);
+			},10)
 		}
 	});
 
@@ -127,8 +114,10 @@ $(document).ready(function() {
 		}
 		if($(this).hasClass("active")) {
 			$(this).removeClass("active");
+			init(true);
 		} else {
 			$(this).addClass("active");
+			$("#canvas-element").find("canvas").remove();
 			if ($(this).data("art")) {
 				switch($(this).data("art")) {
 					case "004":
@@ -138,8 +127,6 @@ $(document).ready(function() {
 						codeArt005();
 						break;
 				}
-				removeObject();
-				handleObject(joeqj);
 			}
 		}
 	});

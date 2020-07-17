@@ -83,9 +83,7 @@ export const changeTheme = (theme) => {
     }
 }
 
-init();
-
-function init() {
+export const init = (logo) => {
     camera = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
     camera.position.z = 5;
 
@@ -120,7 +118,9 @@ function init() {
     spotlightTweenOut = new TWEEN.Tween(spotlight.position);
     spotlightTweenOut.easing(TWEEN.Easing.Cubic.InOut);
 
-    handleObject(joeqj);
+    if(logo === true) {
+        handleObject(joeqj);
+    }
  
     renderer = new THREE.WebGLRenderer({ alpha: true });
     renderer.setClearColor(0x000000, 0);
@@ -138,6 +138,8 @@ function init() {
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );
     window.addEventListener('resize', onWindowResize, false);   
 }
+
+init(true);
 
 function onDocumentMouseMove(event) {
     mouseX = (event.clientX - windowHalfX);
