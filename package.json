@@ -31,7 +31,7 @@
     "webpack-obj-loader": "^1.0.4"
   },
   "dependencies": {
-    "@tweenjs/tween.js": "^18.6.0",
+    "@tweenjs/tween.js": "^18.6.4",
     "gltf-webpack-loader": "^1.0.6",
     "jquery": "^3.5.1",
     "three": "^0.121.1",
